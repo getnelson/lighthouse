@@ -1,0 +1,64 @@
+{
+    "defaultNamespace": "prod",
+    "domain": "your.tld.com",
+    "namespaces": [
+        {
+            "name": "prod",
+            "routes": [
+                {
+                    "port": "default",
+                    "service": "ads-cassandra",
+                    "targets": [
+                        {
+                            "stack": "ads-cassandra-asdf",
+                            "weight": 5
+                        },
+                        {
+                            "stack": "ads-cassandra-fdsa",
+                            "weight": 95
+                        }
+                    ]
+                },
+                {
+                    "port": "default",
+                    "service": "search-api-ning",
+                    "targets": [
+                        {
+                            "stack": "search-api-ning-1.2.4-asdf",
+                            "weight": 100
+                        }
+                    ]
+                },
+                {
+                    "port": "admin",
+                    "service": "search-api-ning",
+                    "targets": [
+                        {
+                            "stack": "search-api-ning-1.2.4-asdf",
+                            "weight": 100
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "name": "dev",
+            "routes": [
+                {
+                    "service": "inventory",
+                    "port": "default",
+                    "targets": [
+                        {
+                            "stack": "inventory-1.2.3-asdf",
+                            "weight": 5
+                        },
+                        {
+                            "stack": "inventory-1.2.4-asdf",
+                            "weight": 95
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
