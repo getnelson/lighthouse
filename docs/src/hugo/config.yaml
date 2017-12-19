@@ -12,8 +12,7 @@ params:
   version: 3.0.x
   google_analytics: UA-57263411-7
   header:
-    color1: "#043309" #dark
-    color2: "#37AD41" #light
+    color: green
     trianglify: true
   header_links:
     - title: GitHub
