@@ -1,0 +1,434 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html>
+        <head>
+          <title>lighthouse - lighthouse</title>
+          <meta name="description" content="lighthouse - lighthouse" />
+          <meta name="keywords" content="lighthouse lighthouse" />
+          <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+          
+      <link href="../lib/template.css" media="screen" type="text/css" rel="stylesheet" />
+      <link href="../lib/diagrams.css" media="screen" type="text/css" rel="stylesheet" id="diagrams-css" />
+      <script type="text/javascript">
+         if(top === self) {
+            var url = '../index.html';
+            var hash = 'lighthouse.package';
+            var anchor = window.location.hash;
+            var anchor_opt = '';
+            if (anchor.length >= 1)
+              anchor_opt = '@' + anchor.substring(1);
+            window.location.href = url + '#' + hash + anchor_opt;
+         }
+   	  </script>
+    
+        </head>
+        <body class="value">
+      <div id="definition">
+        <img src="../lib/package_big.png" />
+        
+        <h1>lighthouse</h1>
+      </div>
+
+      <h4 id="signature" class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <span class="name">lighthouse</span>
+      </span>
+      </h4>
+      
+          <div id="comment" class="fullcommenttop"><dl class="attributes block"> <dt>Source</dt><dd><a href="https://github.com/getnelson/lighthouse/blob/master/core/src/main/scala/package.scala" target="_blank">package.scala</a></dd></dl><div class="toggleContainer block">
+          <span class="toggle">Linear Supertypes</span>
+          <div class="superTypes hiddenContent"><a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a>, <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Any" class="extype" target="_top">Any</a></div>
+        </div></div>
+        
+
+      <div id="mbrsel">
+        <div id="textfilter"><span class="pre"></span><span class="input"><input id="mbrsel-input" type="text" accesskey="/" /></span><span class="post"></span></div>
+        <div id="order">
+              <span class="filtertype">Ordering</span>
+              <ol>
+                
+                <li class="alpha in"><span>Alphabetic</span></li>
+                <li class="inherit out"><span>By inheritance</span></li>
+              </ol>
+            </div>
+        <div id="ancestors">
+                <span class="filtertype">Inherited<br />
+                </span>
+                <ol id="linearization">
+                  <li class="in" name="lighthouse"><span>lighthouse</span></li><li class="in" name="scala.AnyRef"><span>AnyRef</span></li><li class="in" name="scala.Any"><span>Any</span></li>
+                </ol>
+              </div><div id="ancestors">
+            <span class="filtertype"></span>
+            <ol>
+              <li class="hideall out"><span>Hide All</span></li>
+              <li class="showall in"><span>Show all</span></li>
+            </ol>
+            <a href="http://docs.scala-lang.org/overviews/scaladoc/usage.html#members" target="_blank">Learn more about member selection</a>
+          </div>
+        <div id="visbl">
+            <span class="filtertype">Visibility</span>
+            <ol><li class="public in"><span>Public</span></li><li class="all out"><span>All</span></li></ol>
+          </div>
+      </div>
+
+      <div id="template">
+        <div id="allMembers">
+        
+
+        <div id="types" class="types members">
+              <h3>Type Members</h3>
+              <ol><li name="lighthouse.Endpoint" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="EndpointextendsProductwithSerializable"></a>
+      <a id="Endpoint:Endpoint"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Endpoint.html"><span class="name">Endpoint</span></a><span class="params">(<span name="host">host: <span class="extype" name="org.http4s.Uri.Host">Host</span></span>, <span name="port">port: <a href="Port.html" class="extype" name="lighthouse.Port">Port</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt"></p>
+    </li><li name="lighthouse.Lighthouse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Lighthouse[F[_]]=scalaz.~&gt;[lighthouse.LighthouseOp,F]"></a>
+      <a id="Lighthouse[F[_]]:Lighthouse[F]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">Lighthouse</span><span class="tparams">[<span name="F">F<span class="tparams">[<span name="_">_</span>]</span></span>]</span><span class="result"> = <span class="extype" name="scalaz.NaturalTransformation">NaturalTransformation</span>[<a href="LighthouseOp.html" class="extype" name="lighthouse.LighthouseOp">LighthouseOp</a>, <span class="extype" name="lighthouse.Lighthouse.F">F</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseContext" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LighthouseContextextendsProductwithSerializable"></a>
+      <a id="LighthouseContext:LighthouseContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseContext.html"><span class="name">LighthouseContext</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseException" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LighthouseExceptionextendsThrowablewithProductwithSerializable"></a>
+      <a id="LighthouseException:LighthouseException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseException.html"><span class="name">LighthouseException</span></a><span class="result"> extends <span class="extype" name="scala.Throwable">Throwable</span> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseOp" visbl="pub" data-isabs="true" fullComment="no" group="Ungrouped">
+      <a id="LighthouseOp[A]extendsProductwithSerializable"></a>
+      <a id="LighthouseOp[A]:LighthouseOp[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">sealed abstract </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseOp.html"><span class="name">LighthouseOp</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseOpMOps" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LighthouseOpMOps[A]extendsAnyVal"></a>
+      <a id="LighthouseOpMOps[A]:LighthouseOpMOps[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">implicit final </span>
+        <span class="kind">class</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$LighthouseOpMOps.html"><span class="name">LighthouseOpMOps</span></a><span class="tparams">[<span name="A">A</span>]</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseTask" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LighthouseTask[A]=scalaz.Kleisli[scalaz.concurrent.Task,lighthouse.LighthouseContext,A]"></a>
+      <a id="LighthouseTask[A]:LighthouseTask[A]"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">type</span>
+      </span>
+      <span class="symbol">
+        <span class="name">LighthouseTask</span><span class="tparams">[<span name="A">A</span>]</span><span class="result"> = <span class="extype" name="scalaz.Kleisli">Kleisli</span>[<span class="extype" name="scalaz.concurrent.Task">Task</span>, <a href="LighthouseContext.html" class="extype" name="lighthouse.LighthouseContext">LighthouseContext</a>, <span class="extype" name="lighthouse.LighthouseTask.A">A</span>]</span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.NetworkResource" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="NetworkResourceextendsProductwithSerializable"></a>
+      <a id="NetworkResource:NetworkResource"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="NetworkResource.html"><span class="name">NetworkResource</span></a><span class="params">(<span name="service">service: <a href="ServiceType.html" class="extype" name="lighthouse.ServiceType">ServiceType</a></span>, <span name="port">port: <a href="PortName.html" class="extype" name="lighthouse.PortName">PortName</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.Port" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PortextendsAnyValwithProductwithSerializable"></a>
+      <a id="Port:Port"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Port.html"><span class="name">Port</span></a><span class="params">(<span name="asInt">asInt: <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.PortName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PortNameextendsAnyValwithProductwithSerializable"></a>
+      <a id="PortName:PortName"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="PortName.html"><span class="name">PortName</span></a><span class="params">(<span name="asString">asString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.ResourceLocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ResourceLocationextendsProductwithSerializable"></a>
+      <a id="ResourceLocation:ResourceLocation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ResourceLocation.html"><span class="name">ResourceLocation</span></a><span class="params">(<span name="host">host: <span class="extype" name="org.http4s.Uri.Host">Host</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.ServiceType" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ServiceTypeextendsAnyValwithProductwithSerializable"></a>
+      <a id="ServiceType:ServiceType"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="ServiceType.html"><span class="name">ServiceType</span></a><span class="params">(<span name="asString">asString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      <p class="comment cmt">example: <code>ServiceType(&quot;search-api-ning&quot;)</code></p>
+    </li><li name="lighthouse.StackName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="StackNameextendsAnyValwithProductwithSerializable"></a>
+      <a id="StackName:StackName"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="StackName.html"><span class="name">StackName</span></a><span class="params">(<span name="asString">asString: <span class="extype" name="scala.Predef.String">String</span></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.Weight" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WeightextendsAnyValwithProductwithSerializable"></a>
+      <a id="Weight:Weight"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="Weight.html"><span class="name">Weight</span></a><span class="params">(<span name="asInt">asInt: <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Int" class="extype" target="_top">Int</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyVal" class="extype" target="_top">AnyVal</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.WeightedResourceLocation" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="WeightedResourceLocationextendsProductwithSerializable"></a>
+      <a id="WeightedResourceLocation:WeightedResourceLocation"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier">final </span>
+        <span class="kind">case class</span>
+      </span>
+      <span class="symbol">
+        <a href="WeightedResourceLocation.html"><span class="name">WeightedResourceLocation</span></a><span class="params">(<span name="location">location: <a href="ResourceLocation.html" class="extype" name="lighthouse.ResourceLocation">ResourceLocation</a></span>, <span name="weight">weight: <a href="Weight.html" class="extype" name="lighthouse.Weight">Weight</a></span>)</span><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Product" class="extype" target="_top">Product</a> with <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        <div id="values" class="values members">
+              <h3>Value Members</h3>
+              <ol><li name="lighthouse.Lighthouse" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="Lighthouse"></a>
+      <a id="Lighthouse:Lighthouse"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="package$$Lighthouse$.html"><span class="name">Lighthouse</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseContext" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LighthouseContext"></a>
+      <a id="LighthouseContext:LighthouseContext"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseContext$.html"><span class="name">LighthouseContext</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseException" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LighthouseException"></a>
+      <a id="LighthouseException:LighthouseException"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseException$.html"><span class="name">LighthouseException</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.LighthouseOp" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="LighthouseOp"></a>
+      <a id="LighthouseOp:LighthouseOp"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="LighthouseOp$.html"><span class="name">LighthouseOp</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.PortName" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="PortName"></a>
+      <a id="PortName:PortName"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="PortName$.html"><span class="name">PortName</span></a><span class="result"> extends <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Serializable" class="extype" target="_top">Serializable</a></span>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.ScalazHelpers" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="ScalazHelpers"></a>
+      <a id="ScalazHelpers:ScalazHelpers"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="ScalazHelpers$.html"><span class="name">ScalazHelpers</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.blazeclient" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="blazeclient"></a>
+      <a id="blazeclient:blazeclient"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="blazeclient/package.html"><span class="name">blazeclient</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.cache" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="cache"></a>
+      <a id="cache:cache"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">object</span>
+      </span>
+      <span class="symbol">
+        <a href="cache$.html"><span class="name">cache</span></a>
+      </span>
+      </h4>
+      
+    </li><li name="lighthouse.dns" visbl="pub" data-isabs="false" fullComment="no" group="Ungrouped">
+      <a id="dns"></a>
+      <a id="dns:dns"></a>
+      <h4 class="signature">
+      <span class="modifier_kind">
+        <span class="modifier"></span>
+        <span class="kind">package</span>
+      </span>
+      <span class="symbol">
+        <a href="dns/package.html"><span class="name">dns</span></a>
+      </span>
+      </h4>
+      
+    </li></ol>
+            </div>
+
+        
+
+        
+        </div>
+
+        <div id="inheritedMembers">
+        <div class="parent" name="scala.AnyRef">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.AnyRef" class="extype" target="_top">AnyRef</a></h3>
+            </div><div class="parent" name="scala.Any">
+              <h3>Inherited from <a href="http://www.scala-lang.org/api/2.10.6/index.html#scala.Any" class="extype" target="_top">Any</a></h3>
+            </div>
+        
+        </div>
+
+        <div id="groupedMembers">
+        <div class="group" name="Ungrouped">
+              <h3>Ungrouped</h3>
+              
+            </div>
+        </div>
+
+      </div>
+
+      <div id="tooltip"></div>
+
+      <div id="footer">  </div>
+      <script defer="defer" type="text/javascript" id="jquery-js" src="../lib/jquery.js"></script><script defer="defer" type="text/javascript" id="jquery-ui-js" src="../lib/jquery-ui.js"></script><script defer="defer" type="text/javascript" id="tools-tooltip-js" src="../lib/tools.tooltip.js"></script><script defer="defer" type="text/javascript" id="template-js" src="../lib/template.js"></script>
+    </body>
+      </html>

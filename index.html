@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="canonical" href="https://getnelson.github.io/lighthouse/">
+
+  <meta name="generator" content="Hugo 0.22.1" />
+
+  <title>Lighthouse</title>
+
+  
+  
+
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://getnelson.github.io/lighthouse/css/docs.min.css" rel="stylesheet">
+  <link href="https://getnelson.github.io/lighthouse/css/style.css" rel="stylesheet">
+  <link href="https://getnelson.github.io/lighthouse/css/style.green.css" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-1.11.2.min.js"></script>
+  <script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootbox.js/4.3.0/bootbox.min.js"></script>
+  <script src="https://getnelson.github.io/lighthouse/js/docs.min.js"></script>
+</head>
+
+<body>
+
+  
+  <header class="navbar navbar-static-top bs-docs-nav" id="top">
+  <div class="container">
+    <div class="navbar-header" role="banner">
+      <a class="navbar-brand" href="https://getnelson.github.io/lighthouse/">Lighthouse</a>
+    </div>
+    <nav class="collapse navbar-collapse bs-navbar-collapse" role="navigation">
+      <ul class="nav navbar-nav">
+        
+        
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+        <li>
+          <a href="https://github.com/getnelson/lighthouse">GitHub</a>
+        </li>
+        
+        <li>
+          <a href="https://getnelson.github.io/lighthouse/api/">API Docs</a>
+        </li>
+        
+      </ul>
+    </nav>
+  </div>
+</header>
+
+
+  
+
+  <div class="bs-docs-header" id="content">
+    <div class="container">
+      <h1>Home</h1>
+      <p></p>
+    </div>
+  </div>
+
+  <div class="container bs-docs-container">
+    <div class="row">
+      
+      <div class="col-md-9" role="main">
+        <article class="post-content">
+          <section class="bs-docs-section">
+            <h1 id="overview" class="page-header">Overview</h1>
+
+<p><em>Lighthouse</em> is a library for looking up arbitrary network resources such as databases and service components; it is a building block that can be quickly integrated with a variety of applications for a variety of service discovery use-cases. The figure below details the high-level workflow for applications that use lighthouse:</p>
+
+<div class="clearing">
+  <img src="images/workflow.png" />
+  <small><em>Figure 1.0: Lighthouse request workflow</em></small>
+</div>
+
+<p>The workflow depicted in figure 1.0 shows the <em>Lighthouse</em> workflow when calling another remote service (other typical use cases are depicted in the <a href="#user-guide">User Guide</a>:</p>
+
+<ul>
+<li><p><strong>A</strong>: When the application is running, it makes one or more invocations of the <em>Lighthouse</em> API, which will fetch data from the backing <a href="https://www.consul.io">Consul</a> storage system. This data (shown later in the <a href="#protocol">protocol section</a>) informs the application how to turn a logical name (e.g. <code>my-cassandra</code>) into a Consul <code>service</code> name.</p></li>
+
+<li><p><strong>B</strong>: In this example, traffic is routed to the local <a href="https://lyft.github.io/envoy/">Envoy</a> side-car, which maintains TLS connections to outbound services, implements rate limiting and circuit breaking. Other non-envoy lighthouse workflows are discussed in the <a href="#user-guide">user guide</a>.</p></li>
+
+<li><p><strong>C</strong>: Envoy is dynamically aware of the locations of network dependencies for this particular container, and so when receiving a request from the application will automatically conduct load balancing to the remote IP:PORT destinations.</p></li>
+</ul>
+
+<p>With this frame, we can see that <em>Lighthouse</em> is actually a very thin layer that translates human-friendly names into names resolvable in Consul&rsquo;s service catalog, which the runtime routing infrastructure will later use to find the runtime locations of addresses that service that particular network system.</p>
+
+<h1 id="quickstart" class="page-header">QuickStart</h1>
+
+<p>Getting started with <em>Lighthouse</em> is straight forward. Update your build file to include the dependency, and then modify your project code pertaining to your use case.</p>
+
+<h2 id="quickstart-setup" data-subheading-of="quickstart">Project Setup</h2>
+
+<p>Various transports are available for <em>Lighthouse</em>, but it is highly recommended that most users leverage the <code>blaze</code> transport, like so:</p>
+
+<pre><code>libraryDependencies += &quot;io.verizon.lighthouse&quot; %% &quot;blaze&quot; % &quot;3.0.0-SNAPSHOT&quot;
+</code></pre>
+
+<p>This will pull in the Consul-backed lighthouse.</p>
+
+<h3 id="quickstart-setup-client" class="linkable">Creating the Client</h3>
+
+<p>To create the default client, one needs to wire together the <a href="http://http4s.org/">http4s</a> client and the <em>Lighthouse</em> client. The idea here is that the transport client (http4s in this example) can then be tuned for the workload the implementing application will be conducting. <em>Lighthouse</em> comes with some reasonable defaults, but having the ability to tune if required is often an important aspect.</p>
+
+<pre><code class="language-scala">import org.http4s.client.Client
+import lighthouse._, blazeclient.{ClientConfig, defaultHttp4sClient}
+
+final case class ApplicationConfig(
+  http4sClient: Client,
+  lighthouse: Lighthouse[LighthouseTask])
+
+def initializeConfig(): ApplicationConfig = {
+  val http4sClient = defaultHttp4sClient(ClientConfig.default())
+  val lighthouse = Lighthouse.defaultClient(http4sClient)
+  ApplicationConfig(http4sClient, lighthouse)
+}
+</code></pre>
+
+<p>This example assumes your application is structured in a functional manner, where you have a typed configuration class and are passing that configuration around in your application (e.g. with <code>Reader</code> monad or similar). Even if you do not have this kind of structure, you can use <em>Lighthouse</em>, but the initialization would look slightly different.</p>
+
+<h2 id="quickstart-service" data-subheading-of="quickstart">Service Resource</h2>
+
+<p>The primary intended use-case for <em>Lighthouse</em> is to call over service systems. To that end, <em>Lighthouse</em> prioritizes that and provides a convenient set of functional idioms to make doing that easy. Here are some examples of how you might make service calls using <em>Lighthouse</em> and http4s.</p>
+
+<pre><code class="language-scala">import lighthouse._
+import lighthouse.LighthouseOp.serviceCall
+
+import org.http4s.Method
+import org.http4s.client.Client
+import scalaz.concurrent.Task
+
+object Accounts {
+  import JsonSupport._ // defined below
+
+  final case class ApplicationConfig(http4sClient: Client, lighthouse: Lighthouse[LighthouseTask])
+  final case class AccountContext(app: ApplicationConfig, userCtx: LighthouseContext)
+
+  final case class User(id: String, name: String, age: Int)
+  final case class NewUser(name: String, age: Int)
+
+  def urlEncode(s: String): String =
+    java.net.URLEncoder.encode(s, &quot;UTF-8&quot;)
+
+  // The type of service that is being called.
+  // For the Nelson infrastructure, this must match up with what's declared in
+  // its .nelson.yml.
+  val accountService: ServiceType = ServiceType(&quot;accounts-http&quot;)
+
+  // a fairly simple GET call that simply returns a String
+  def fetchUserName(userId: String, ctx: AccountContext): Task[String] = {
+    val op = serviceCall(accountService, Method.GET,
+      _ / &quot;users&quot; / urlEncode(userId) / &quot;name&quot;)
+
+    for {
+      req &lt;- op.runWith(ctx.app.lighthouse).run(ctx.userCtx)
+      name &lt;- ctx.app.http4sClient.expect[String](req)
+    } yield name
+  }
+
+  // a call that POSTs a JSON body and decodes a response JSON body
+  def createUser(newUser: NewUser, ctx: AccountContext): Task[User] = {
+    val op = serviceCall(accountService, Method.POST,
+      _ / &quot;users&quot;)
+
+    for {
+      req &lt;- op.runWith(ctx.app.lighthouse).run(ctx.userCtx)
+      withBody &lt;- req.withBody(newUser)
+      user &lt;- ctx.app.http4sClient.expect[User](withBody)
+    } yield user
+  }
+
+  object JsonSupport {
+    import argonaut._
+    import org.http4s.{EntityDecoder, EntityEncoder}
+    import org.http4s.argonaut.{jsonOf, jsonEncoderOf}
+
+    implicit val userCodec: CodecJson[User] =
+      CodecJson.casecodec3(User.apply, User.unapply)(&quot;id&quot;, &quot;name&quot;, &quot;age&quot;)
+
+    implicit val userDecoder: EntityDecoder[User] = jsonOf[User]
+
+    implicit val newUserCodec: CodecJson[NewUser] =
+      CodecJson.casecodec2(NewUser.apply, NewUser.unapply)(&quot;name&quot;, &quot;age&quot;)
+
+    implicit val newUserEncoder: EntityEncoder[NewUser] = jsonEncoderOf[NewUser]
+  }
+}
+</code></pre>
+
+<p>This is a fairly complete example, which is why it is fairly long. This includes all the JSON encoders and everything, but as can be seen, the <em>Lighthouse</em> section is short.</p>
+
+<h2 id="quickstart-arbitrary" data-subheading-of="quickstart">Arbitrary Resources</h2>
+
+<p><em>Lighthouse</em> can be used to look up addresses of a network system (such members of a database cluster). If you don&rsquo;t know the name of the resource you need (<code>cassandra-ads</code> in the example below), then you can simply run <code>nelson units list -ns dev</code> to see what units are available to depend on within the <code>dev</code> namespace.</p>
+
+<pre><code class="language-scala">import scalaz.NonEmptyList
+import scalaz.concurrent.Task
+
+object Example {
+  import lighthouse._, LighthouseOp.lookupInstances
+
+  val cassandraResource = NetworkResource(ServiceType(&quot;cassandra-ads&quot;), PortName.Default)
+
+  /**
+   * Find an instances in the Cassandra cluster.
+   *
+   * The returned `Endpoint` has the host name, port number, protocol, etc.
+   */
+  def cassandra(lighthouse: Lighthouse[LighthouseTask]): Task[NonEmptyList[Endpoint]] =
+    lookupInstances(cassandraResource)
+      .runWith(lighthouse)
+      .run(LighthouseContext.System)
+}
+</code></pre>
+
+<p>In this example the <code>cassandra</code> function will return a list of all the known Cassandra <code>Endpoint</code>&rsquo;s for the <code>cassandra-ads</code> system. If we wanted to initialize a Cassandra driver with this set of endpoints, we can simply extract the authority information like so:</p>
+
+<pre><code>/**
+ * The URI (in string form) with the host and port 10.10.123.241:5436
+ */
+def endpointAuthority(endpoint: Endpoint): String =
+  endpoint.authority.renderString
+</code></pre>
+
+<p>These functions can be <code>map</code>ed over the list of <code>Endpoint</code> to return a list of addresses, such as is typically used to seed a database driver for a database like Cassandra, or a message queue like Kafka. If for some reason you needed the addresses complete with the protocol, then you can use a function like:</p>
+
+<pre><code>/**
+ * The URI (in string form) for an endpoint, complete with protocol, host and port.
+ */
+def endpointUriString(endpoint: Endpoint): String =
+  endpoint.httpUri.renderString
+</code></pre>
+
+<p>In the event you want to discover the URL for a single instance of the service, but not have lighthouse call it, one could do that using the following idiom:</p>
+
+<pre><code class="language-scala">import org.http4s.Uri
+import scalaz.concurrent.Task
+
+object Example {
+  import lighthouse._, LighthouseOp.lookupService
+
+  def foo(lighthouse: Lighthouse[LighthouseTask]): Task[Uri] =
+    lookupService(ServiceType(&quot;foo-http&quot;))
+      .runWith(lighthouse)
+      .run(LighthouseContext.System)
+}
+</code></pre>
+
+<p>This will return a <code>Uri</code> that is already preformatted to route to the local routing infrastructure (<a href="#overview">see the overview for information on that</a>), but it puts no constraints on what software you use to call the URI. This is typically not advised, but is useful in certain edge cases such as interacting with legacy or third-party libraries.</p>
+
+<h1 id="user-guide" class="page-header">User Guide</h1>
+
+<p>Before diving into this section, be sure to have read the <a href="#quickstart">quickstart section</a>, which is what most users are probably looking for. This section primarily covers the specific <em>Lighthouse</em> operations and how applications using <em>Lighthouse</em> can enable themselves for testing with <em>Lighthouse</em> protocol fixtures.</p>
+
+<h2 id="user-guide-operations" data-subheading-of="user-guide">Operations</h2>
+
+<p>Whilst <em>Lighthouse</em> has a limited set of operations in its algebra, these operations should form the building blocks of service discovery in a variety of use cases: irrespective if you&rsquo;re discovering a database, messaging system, another service, or some other internal components&hellip; if its a network system, <em>Lighthouse</em> should have you covered.</p>
+
+<table class="table">
+  <thead>
+    <tr>
+      <td><strong>Operation</strong></td>
+      <td><strong>Description</strong></td>
+    </tr>
+  </thead>
+  <tr>
+    <td><code>serviceCall</code></td>
+    <td>When making remote calls to another network system, <em>Lighthouse</em> will take the configured client and prepare a <code>Request</code> that is ready for execution. This model allows users to configure their outbound request in whichever manner makes sense for them, whilst not burdening the caller with the underlying details of discovery, routing or performance.</td>
+  </tr>
+  <tr>
+    <td><code>lookupInstances</code></td>
+    <td>Get a list of all the IP:PORT combinations for the requested network system. Using <code>lookupInstances</code> will return every address that is registered to handle this particular application.</td>
+  </tr>
+  <tr>
+    <td><code>lookupInstance</code></td>
+    <td>Essentially the same as <code>lookupInstances</code>, except that only a single address is returned. Ordered is non-deterministic, so consumers should not always expect to receive the same address at the head of the sequence.</td>
+  </tr>
+  <tr>
+    <td><code>lookupService</code></td>
+    <td>Returns a URI to call, instead of actually preparing a request or any kind of prepared client. This is a relatively primitive operation and should not be used by the majority of users.</td>
+  </tr>
+</table>
+
+<h2 id="user-guide-testing" data-subheading-of="user-guide">Testing</h2>
+
+<p><em>Lighthouse</em> is implemented as a <a href="https://en.wikipedia.org/wiki/Free_algebra">Free algebra</a>. If you&rsquo;re not familiar, the high-level ramification of this means that the use of <em>Lighthouse</em> operations and the execution of those operations are separate, and the <em>how</em> (the interpreter) of those operations can be swapped out without affecting your calling code. This rather useful feature means that one can swap out the production interpreter with one that is more appropriate for a testing environment. <em>Lighthouse</em> provides a test interpreter based on simple maps.</p>
+
+<pre><code class="language-scala">import scalaz.concurrent.Task
+import org.http4s.Uri
+import lighthouse._
+
+val inventory = ServiceType(&quot;inventory&quot;)
+val cassandra = NetworkResource(ServiceType(&quot;ads-cassandra&quot;), PortName.Default)
+
+val testLighthouse = Lighthouse.testClient(
+  serviceMap = Map(inventory -&gt; Uri.uri(&quot;http://127.0.0.1:4477/prod/inventory&quot;)),
+  networkResourceMap = Map(cassandra -&gt; List(Endpoint(Uri.RegName(&quot;cassandra.service.dc1.example.com&quot;), Port(9042))))
+)
+</code></pre>
+
+<p>This test lighthouse client is capable of the same operations as the default lighthouse client:</p>
+
+<pre><code class="language-scala">scala&gt; import lighthouse.LighthouseOp._
+import lighthouse.LighthouseOp._
+
+scala&gt; lookupService(inventory).runWith(testLighthouse).run(LighthouseContext.System).run
+res2: org.http4s.Uri = http://127.0.0.1:4477/prod/inventory
+
+scala&gt; httpsEndpoint(inventory).runWith(testLighthouse).run(LighthouseContext.System).run
+res3: org.http4s.Request = Request(method=GET, uri=http://127.0.0.1:4477/prod/inventory, headers=Headers()
+
+scala&gt; lookupInstances(cassandra).runWith(testLighthouse).run(LighthouseContext.System).run
+res4: scalaz.NonEmptyList[lighthouse.Endpoint] = NonEmptyList(Endpoint(cassandra.service.dc1.example.com,9042))
+
+scala&gt; lookupInstance(cassandra).runWith(testLighthouse).run(LighthouseContext.System).run
+res5: lighthouse.Endpoint = Endpoint(cassandra.service.dc1.example.com,9042)
+</code></pre>
+
+<h1 id="developers" class="page-header">Developers</h1>
+
+<p>Extending this Scala implementation of <em>Lighthouse</em> or implementing <em>Lighthouse</em> support in another language is relatively straight forward. This section contains the information one would need to do to modify or extend <em>Lighthouse</em>. This section is not required to simply use an existing implementation of <em>Lighthouse</em>.</p>
+
+<h2 id="developers-languages" data-subheading-of="developers">Languages</h2>
+
+<p><em>Lighthouse</em> already has implementations in several languages:</p>
+
+<ul>
+<li><a href="https://github.com/getnelson/lighthouse">Scala</a></li>
+</ul>
+
+<p>If you require something that is not currently available, please consider contributing or talking with the the Nelson team.</p>
+
+<h2 id="developers-protocol" data-subheading-of="developers">Protocol</h2>
+
+<p>The <em>Lighthouse</em> protocol is a simplistic JSON document that - for a given Consul service name - has corresponding data held in the Consul Key-Value storage. For example, the following data would be held in the Consul KV store at <code>lighthouse/discovery/v1/howdy-http--1-0-388--aeiq8irl</code>:</p>
+
+<pre><code>{
+  &quot;namespaces&quot;: [
+    {
+      &quot;routes&quot;: [
+        {
+          &quot;port&quot;: &quot;default&quot;,
+          &quot;targets&quot;: [
+            {
+              &quot;weight&quot;: 100,
+              &quot;protocol&quot;: &quot;http&quot;,
+              &quot;port&quot;: 9000,
+              &quot;stack&quot;: &quot;howdy-http--1-0-388--aeiq8irl&quot;
+            }
+          ],
+          &quot;service&quot;: &quot;howdy-http&quot;
+        }
+      ],
+      &quot;name&quot;: &quot;dev&quot;
+    }
+  ],
+  &quot;domain&quot;: &quot;your.consul-tld.com&quot;,
+  &quot;defaultNamespace&quot;: &quot;dev&quot;
+}
+</code></pre>
+
+<h2 id="developers-contributing" data-subheading-of="developers">Contributing</h2>
+
+<p>Contributing to <em>Lighthouse</em> is simple! If there is something you think needs to be fixed, either open an issue on GitHub or, better yet, just send a pull request with a patch. Whilst a fair amount of effort has been put into making Lighthouse easy-to-use, sometimes it helps to know more of the internal details, and the author encourages the reader to view the source code to understand the internals.</p>
+
+<h1 id="credits" class="page-header">Credits</h1>
+
+<p><em>Lighthouse</em> was designed and created by the following good people:</p>
+
+<ul>
+<li><a href="https://github.com/ceedubs">Cody Allen</a></li>
+<li><a href="https://github.com/timperrett">Timothy Perrett</a></li>
+<li><a href="https://github.com/stew">Stew O&rsquo;Connor</a></li>
+</ul>
+
+<p>In addition, the following people are honourably mentioned for their contributions, advice and early adoption of <em>Lighthouse</em>:</p>
+
+<ul>
+<li>Eduardo Jimenez</li>
+<li>Andrew Morhland</li>
+<li>Greg Flanagan</li>
+<li>Vincent Marquez</li>
+</ul>
+
+          </section>
+        </article>
+      </div>
+      
+      <div class="col-md-3" role="complementary">
+  <div class="bs-docs-sidebar hidden-print">
+    <ul class="nav bs-docs-sidenav">
+    </ul>
+    <a class="back-to-top" href="#top">
+      <i class="glyphicon glyphicon-chevron-up"></i> Back to top
+    </a>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <footer class="bs-docs-footer" role="contentinfo">
+  <div class="container">
+    <p>
+      Built with &hearts; by the infrastructure engineering team.</p>
+    <p>
+      Documentation template by <a target="_blank" href="http://getbootstrap.com">Bootstrap team</a>,
+      adapted for use with <a target="_blank" href="https://gohugo.com">Hugo.</a>
+    </p>
+
+    <ul class="bs-docs-footer-links muted">
+      <li>Currently v3.0.0-SNAPSHOT</li>
+    
+      <li>&middot;</li>
+      <li><a href="https://github.com/getnelson/lighthouse">GitHub</a></li>
+    
+      <li>&middot;</li>
+      <li><a href="https://github.com/getnelson/lighthouse/issues">Issues</a></li>
+    
+      <li>&middot;</li>
+      <li><a href="https://en.wikipedia.org/wiki/All_rights_reserved">Copyright Verizon 2015-2016</a></li>
+    </ul>
+  </div>
+</footer>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.4.11/d3.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/trianglify/0.1.2/trianglify.min.js"></script>
+
+
+
+  <script>trianglify('#043309', '#37AD41');</script>
+
+
+<script type="text/javascript">
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-57263411-7', 'auto');
+  ga('send', 'pageview');
+</script>
+</body>
+</html>
+
