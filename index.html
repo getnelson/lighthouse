@@ -55,11 +55,20 @@
 
   
 
-  <div class="bs-docs-header" id="content">
+  <div class="bs-docs-masthead" id="content">
     <div class="container">
-      <h1>Home</h1>
-      <p></p>
+      <h1 class="home-title">Lighthouse</h1>
+      <p class="lead">Library for runtime system discovery</p>
+      <p class="lead">
+        <a href="//github.com/getnelson/lighthouse" class="btn btn-outline-inverse btn-lg">Source Code</a>
+      </p>
+      <p class="version">
+        Currently v3.0.0-SNAPSHOT<br />
+      </p>
     </div>
+    <a href="https://travis-ci.org/getnelson/lighthouse">
+      <img src="https://travis-ci.org/getnelson/lighthouse.svg" />
+    </a>
   </div>
 
   <div class="container bs-docs-container">
@@ -67,8 +76,9 @@
       
       <div class="col-md-9" role="main">
         <article class="post-content">
-          <section class="bs-docs-section">
-            <h1 id="overview" class="page-header">Overview</h1>
+
+          
+              <h1 id="overview" class="page-header">Overview</h1>
 
 <p><em>Lighthouse</em> is a library for looking up arbitrary network resources such as databases and service components; it is a building block that can be quickly integrated with a variety of applications for a variety of service discovery use-cases. The figure below details the high-level workflow for applications that use lighthouse:</p>
 
@@ -386,7 +396,8 @@ res5: lighthouse.Endpoint = Endpoint(cassandra.service.dc1.example.com,9042)
 <li>Vincent Marquez</li>
 </ul>
 
-          </section>
+          
+
         </article>
       </div>
       
@@ -447,4 +458,3 @@ res5: lighthouse.Endpoint = Endpoint(cassandra.service.dc1.example.com,9042)
 </script>
 </body>
 </html>
-
